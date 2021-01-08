@@ -1,11 +1,16 @@
 /* modifier 0 means no modifier */
 static int surfuseragent    = 1;  /* Append Surf version to default WebKit user agent */
-static char *fulluseragent  = ""; /* Or override the whole user agent string */
+// with chrome user string its loading faster
+static char *fulluseragent  = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36"; /* Or override the whole user agent string */
 static char *scriptfile     = "~/.surf/script.js";
-static char *styledir       = "~/.surf/styles/";
+// static char *styledir       = "~/.surf/styles/";
+static char *styledir       = "~/.styles/surf/";
 static char *certdir        = "~/.surf/certificates/";
 static char *cachedir       = "~/.surf/cache/";
 static char *cookiefile     = "~/.surf/cookies.txt";
+static SearchEngine searchengines[] = {
+	{ "g",   "http://www.google.com/search?q=%s"   },
+};
 
 /* Webkit default features */
 /* Highest priority value will be used.
@@ -23,13 +28,13 @@ static Parameter defconfig[ParameterLast] = {
 	[CookiePolicies]      =       { { .v = "@Aa" }, },
 	[DefaultCharset]      =       { { .v = "UTF-8" }, },
 	[DiskCache]           =       { { .i = 1 },     },
-	[DNSPrefetch]         =       { { .i = 0 },     },
+	[DNSPrefetch]         =       { { .i = 1 },     },
 	[FileURLsCrossAccess] =       { { .i = 0 },     },
 	[FontSize]            =       { { .i = 12 },    },
 	[FrameFlattening]     =       { { .i = 0 },     },
 	[Geolocation]         =       { { .i = 0 },     },
 	[HideBackground]      =       { { .i = 0 },     },
-	[Inspector]           =       { { .i = 0 },     },
+	[Inspector]           =       { { .i = 1 },     },
 	[Java]                =       { { .i = 1 },     },
 	[JavaScript]          =       { { .i = 1 },     },
 	[KioskMode]           =       { { .i = 0 },     },
@@ -41,7 +46,7 @@ static Parameter defconfig[ParameterLast] = {
 	[ScrollBars]          =       { { .i = 1 },     },
 	[ShowIndicators]      =       { { .i = 1 },     },
 	[SiteQuirks]          =       { { .i = 1 },     },
-	[SmoothScrolling]     =       { { .i = 0 },     },
+	[SmoothScrolling]     =       { { .i = 1 },     },
 	[SpellChecking]       =       { { .i = 0 },     },
 	[SpellLanguages]      =       { { .v = ((char *[]){ "en_US", NULL }) }, },
 	[StrictTLS]           =       { { .i = 1 },     },
@@ -108,8 +113,16 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
  * the list.
  */
 static SiteSpecific styles[] = {
-	/* regexp               file in $styledir */
-	{ ".*",                 "default.css" },
+    /* regexp               file in $styledir */
+    // { ".*",                 "default.css" },
+    { ".*vk.com.*",               "vk.css" },
+    { ".*homepage.html.*",        "homepage.css" },
+    { ".*soundcloud.com.*",       "soundcloud.css" },
+    { ".*github.com.*",           "github.css" },
+    { ".*reddit.com.*",           "reddit.css" },
+    { ".*google.com.*",           "google.css" },
+    { ".*stackoverflow.com.*",    "stackoverflow.css" },
+    { ".*wikipedia.org.*",        "wikipedia.css" }
 };
 
 /* certificates */
@@ -184,11 +197,12 @@ static Key keys[] = {
 
 /* button definitions */
 /* target can be OnDoc, OnLink, OnImg, OnMedia, OnEdit, OnBar, OnSel, OnAny */
+/* .i = 0 means that you open window in same tabbed */
 static Button buttons[] = {
 	/* target       event mask      button  function        argument        stop event */
 	{ OnLink,       0,              2,      clicknewwindow, { .i = 0 },     1 },
-	{ OnLink,       MODKEY,         2,      clicknewwindow, { .i = 1 },     1 },
-	{ OnLink,       MODKEY,         1,      clicknewwindow, { .i = 1 },     1 },
+	{ OnLink,       MODKEY,         2,      clicknewwindow, { .i = 0 },     1 },
+	{ OnLink,       MODKEY,         1,      clicknewwindow, { .i = 0 },     1 },
 	{ OnAny,        0,              8,      clicknavigate,  { .i = -1 },    1 },
 	{ OnAny,        0,              9,      clicknavigate,  { .i = +1 },    1 },
 	{ OnMedia,      MODKEY,         1,      clickexternplayer, { 0 },       1 },
