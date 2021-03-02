@@ -114,15 +114,16 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
  */
 static SiteSpecific styles[] = {
     /* regexp               file in $styledir */
-    // { ".*",                 "default.css" },
-    { ".*vk.com.*",               "vk.css" },
-    { ".*homepage.html.*",        "homepage.css" },
-    { ".*soundcloud.com.*",       "soundcloud.css" },
-    { ".*github.com.*",           "github.css" },
-    { ".*reddit.com.*",           "reddit.css" },
-    { ".*google.com.*",           "google.css" },
-    { ".*stackoverflow.com.*",    "stackoverflow.css" },
-    { ".*wikipedia.org.*",        "wikipedia.css" }
+    { ".*vk.com.*",                 "vk.css" },
+    { ".*homepage.html.*",          "homepage.css" },
+    { ".*soundcloud.com.*",         "soundcloud.css" },
+    { ".*github.com.*",             "github.css" },
+    { ".*reddit.com.*",             "reddit.css" },
+    { ".*google.com.*",             "google.css" },
+    { ".*stackoverflow.com.*",      "stackoverflow.css" },
+    { ".*wikipedia.org.*",          "wikipedia.css" },
+    { "file:///.*tutorials/.*html", "tutorial.css"},
+    { ".*",                         "default.css" }
 };
 
 /* certificates */
