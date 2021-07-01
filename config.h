@@ -3,13 +3,14 @@ static int surfuseragent    = 1;  /* Append Surf version to default WebKit user 
 // with chrome user string its loading faster
 static char *fulluseragent  = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36"; /* Or override the whole user agent string */
 static char *scriptfile     = "~/.surf/script.js";
-// static char *styledir       = "~/.surf/styles/";
-static char *styledir       = "~/.styles/surf/";
+static char *styledir       = "~/.surf/styles/";
+/* static char *styledir       = "~/.styles/surf/"; */
 static char *certdir        = "~/.surf/certificates/";
 static char *cachedir       = "~/.surf/cache/";
 static char *cookiefile     = "~/.surf/cookies.txt";
 static SearchEngine searchengines[] = {
-	{ "g",   "http://www.google.com/search?q=%s"   },
+	{ "g",   "http://www.google.com/search?q=%s"              },
+	{ "y",   "http://www.youtube.com/results?search_query=%s" },
 };
 
 /* Webkit default features */
@@ -82,10 +83,18 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 }
 
 /* DOWNLOAD(URI, referer) */
+/* #define DOWNLOAD(u, r) { \ */
+/*         .v = (const char *[]){ "st", "-e", "/bin/sh", "-c",\ */
+/*              "curl -g -L -J -O -A \"$1\" -b \"$2\" -c \"$2\"" \ */
+/*              " -e \"$3\" --output-dir $HOME/downloads \"$4\"; read", \ */
+/*              "surf-download", useragent, cookiefile, r, u, NULL \ */
+/*         } \ */
+/* } */
 #define DOWNLOAD(u, r) { \
         .v = (const char *[]){ "st", "-e", "/bin/sh", "-c",\
-             "curl -g -L -J -O -A \"$1\" -b \"$2\" -c \"$2\"" \
-             " -e \"$3\" \"$4\"; read", \
+             "wget --no-glob --trust-server-names",\
+             " -U \"$1\" --load-cookies \"$2\" --save-cookies \"$2\"",\
+             " --referer \"$3\" --directory-prefix=$HOME/downloads \"$4\"; read",\
              "surf-download", useragent, cookiefile, r, u, NULL \
         } \
 }

@@ -1718,7 +1718,11 @@ decideresource(WebKitPolicyDecision *d, Client *c)
         webkit_policy_decision_use(d);
     } else {
         webkit_policy_decision_ignore(d);
-        download(c, res);
+        if (g_str_has_prefix(uri, "file://")) {
+            handleplumb(c, uri);
+        } else {
+            download(c, res);
+        }
     }
 }
 
